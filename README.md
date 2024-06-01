@@ -4,7 +4,7 @@
 * Dainius Gelžinis
 * Akvilė Lukauskaitė 1953648
 * Aleksandr Nikolaev
-* Aleksandr Vardanian
+* Aleksandr Vardanian 1942263
 
 ### Description
 TODO: A short description of your logic puzzle type in your own words
