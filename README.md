@@ -1,7 +1,7 @@
 # Puzzle
 ## Group Assignment 2IRR00 2024 group 60
 * Ivan Bondyrev
-* Dainius Gelžinis
+* Dainius Gelžinis 1995006
 * Akvilė Lukauskaitė 1953648
 * Aleksandr Nikolaev
 * Aleksandr Vardanian
