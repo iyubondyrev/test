@@ -19,7 +19,7 @@ public class SEntryTest {
     public void testConstructor() {
         System.out.println("SEntry");
         String input = "a 2 13";
-        String expResult = "(1, 2) 13";
+        String expResult = "a 2 13";
         Scanner scanner = new Scanner(input);
         SEntry instance = new SEntry(scanner);
         assertEquals(expResult, instance.toString(), "toString");  
@@ -31,9 +31,9 @@ public class SEntryTest {
     @Test
     public void testScanEntries() {
         System.out.println("scanEntries, plain");
-        String expEntry0 = "(1, 2) 12";
-        String expEntry1 = "(2, 1) 17";
-        String expResult = "a 2 12" + "\n" + "b 1 17" + "\n";
+        String expEntry0 = "a 2 12";
+        String expEntry1 = "b 1 17";
+        String expResult = expEntry0 + "\n" + expEntry1 + "\n";
         List<SEntry> result = SEntry.scanEntries(new Scanner(expResult));
         assertAll(
                 () -> assertEquals(2, result.size(), "size"),
@@ -48,8 +48,8 @@ public class SEntryTest {
     @Test
     public void testScanEntries2() {
         System.out.println("scanEntries, plain");
-        String expEntry0 = "(1, 2) 12";
-        String expEntry1 = "(2, 1) 17";
+        String expEntry0 = "a 2 12";
+        String expEntry1 = "b 1 17";
         String expResult = "a 2 12         " + "\n" + "b       1 17" + "\n";
         List<SEntry> result = SEntry.scanEntries(new Scanner(expResult));
         assertAll(
