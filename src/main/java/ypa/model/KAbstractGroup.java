@@ -10,10 +10,10 @@ import java.util.List;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public abstract class AbstractGroup implements Iterable<SCell> {
+public abstract class KAbstractGroup implements Iterable<KCell> {
 
     /** The cells in the group. */
-    private final List<SCell> cells;
+    private final List<KCell> cells;
 
     /** How often each cell's state occurs in the group. */
     private final Histogram counts;
@@ -29,7 +29,7 @@ public abstract class AbstractGroup implements Iterable<SCell> {
     /**
      * Constructs an empty group.
      */
-    public AbstractGroup() {
+    public KAbstractGroup() {
         cells = new ArrayList<>();
         counts = new Histogram();
         total = 0;
@@ -50,7 +50,7 @@ public abstract class AbstractGroup implements Iterable<SCell> {
      * @param cell  the cell to check
      * @return whether {@code this} contains {@code cell}
      */
-    public boolean contains(final SCell cell) {
+    public boolean contains(final KCell cell) {
         return cells.contains(cell);
     }
 
@@ -61,11 +61,11 @@ public abstract class AbstractGroup implements Iterable<SCell> {
      * @pre {@code cell != null}
      * @post {@code this == \old(this + [cell])}
      */
-    void add(final SCell cell) {
+    void add(final KCell cell) {
         cells.add(cell);
         int state = cell.getState();
         counts.adjust(state, +1);
-        if (state != SCell.BLOCKED) {
+        if (state != KCell.BLOCKED) {
             total += state;
         }
     }
@@ -78,7 +78,7 @@ public abstract class AbstractGroup implements Iterable<SCell> {
      * @pre {@code cell != null}
      * @post {@code counts have been updated}
      */
-    public void update(final SCell cell, final int newState) {
+    public void update(final KCell cell, final int newState) {
         int state = cell.getState();
         counts.adjust(state, -1);
         counts.adjust(newState, +1);
@@ -120,7 +120,7 @@ public abstract class AbstractGroup implements Iterable<SCell> {
      * Returns an iterator over this group.
      */
     @Override
-    public Iterator<SCell> iterator() {
+    public Iterator<KCell> iterator() {
         return cells.iterator();
     }
 

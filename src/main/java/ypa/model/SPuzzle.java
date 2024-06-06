@@ -122,6 +122,6 @@ public class SPuzzle {
      * @post all cells in the grid are cleared
      */
     public void clear() {
-        grid.groups.forEach(SGroup::clear);
+        grid.groups.forEach(sGroup -> sGroup.clear());
     }
 }

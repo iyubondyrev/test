@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public class KGrid extends AbstractGroup implements Iterable<KCell> {
+public class KGrid extends KAbstractGroup implements Iterable<KCell> {
 
     /** The grid of cells as a list of rows. */
     private final List<List<KCell>> matrix;
@@ -28,7 +28,7 @@ public class KGrid extends AbstractGroup implements Iterable<KCell> {
     // TODO: Consider merging nRows, nColumns into EnumMap<Direction, Integer>
 
     /** The entry specifications. */
-    private final List<KEntry> entries;
+    private List<KEntry> entries;
 
     /** Total sum and length of entries in a particular direction. */
     private final EnumMap<Direction, KSpec> totals;
@@ -176,7 +176,7 @@ public class KGrid extends AbstractGroup implements Iterable<KCell> {
      * @post {@code group.contains(cell)}
      */
     public static void associate(
-            final KCell cell, final AbstractGroup group)
+            final KCell cell, final KAbstractGroup group)
             throws IllegalArgumentException {
         if (cell == null) {
             throw new IllegalArgumentException(KGrid.class.getSimpleName()

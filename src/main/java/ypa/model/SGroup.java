@@ -8,25 +8,9 @@ import java.util.List;
  * 
  * @author Dainius Gelzinis 1995006
  */
-public class SGroup extends AbstractSGroup {
-    private int targetSum;
+public class SGroup extends AbstractGroup {
 
-    /**
-     * Constructs a group with the specified cells and target sum.
-     *
-     * @param cells the list of cells in the group.
-     * @param targetSum the target sum for the group.
-     * @throws IllegalArgumentException if the number of cells is not 4.
-     * @pre cells != null && cells.size() == 4
-     * @post this.cells == cells && this.targetSum == targetSum
-     */
-    public SGroup(List<SCell> cells, int targetSum) {
-        super(cells);
-        if (cells.size() != 4) {
-            throw new IllegalArgumentException("Each group must consist of 4 cells.");
-        }
-        this.targetSum = targetSum;
-    }
+    private int targetSum;
 
     /**
      * Validates the group by checking if the sum of its cells values equals the target sum.
@@ -37,7 +21,14 @@ public class SGroup extends AbstractSGroup {
      */
     @Override
     public boolean isValid() {
-        int currentSum = sumValues();
-        return currentSum == targetSum && cells.stream().allMatch(SCell::isSet);
+        return true;
+    }
+
+    private int sumValues() {
+        return targetSum;
+    }
+
+    void clear() {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

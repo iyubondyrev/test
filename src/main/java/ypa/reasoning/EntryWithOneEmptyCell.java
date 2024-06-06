@@ -3,7 +3,7 @@ package ypa.reasoning;
 import ypa.command.Command;
 import ypa.command.CompoundCommand;
 import ypa.command.SetCommand;
-import ypa.model.AbstractGroup;
+import ypa.model.KAbstractGroup;
 import ypa.model.KCell;
 import ypa.model.KEntry;
 import ypa.model.KPuzzle;
@@ -28,7 +28,7 @@ public class EntryWithOneEmptyCell extends EmptyCellReasoner {
         }
         CompoundCommand result = super.applyToCell(cell);
 
-        for (AbstractGroup g : cell.groups()) {
+        for (KAbstractGroup g : cell.groups()) {
             if (g instanceof KEntry && g.getStateCount(KCell.EMPTY) == 1) {
                 // g is a horizontal or vertical entry with one empty cell
                 int sum = ((KEntry) g).getSpecification().getSum();

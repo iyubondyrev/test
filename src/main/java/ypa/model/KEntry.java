@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public class KEntry extends AbstractGroup {
+public class KEntry extends KAbstractGroup {
 
     /** The location. */
     private final Location location;

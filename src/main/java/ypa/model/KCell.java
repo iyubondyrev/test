@@ -32,7 +32,7 @@ public class KCell {
      * The groups to which this cell belongs.
      * The first group will be the whole grid.
      */
-    private final List<AbstractGroup> groups;
+    private final List<KAbstractGroup> groups;
 
     /** Location in the grid, if any. */
     private Location location;
@@ -89,7 +89,7 @@ public class KCell {
             throw new IllegalArgumentException(getClass().getSimpleName()
                     + ".setState().pre failed: state == " + state + " < " + BLOCKED);
         }
-        for (AbstractGroup group : groups) {
+        for (KAbstractGroup group : groups) {
             group.update(this, state);
         }
         this.state = state;
@@ -147,7 +147,7 @@ public class KCell {
         if (!this.isFilled()) {
             return true;
         }
-        for (AbstractGroup group : groups) {
+        for (KAbstractGroup group : groups) {
             if (group == grid) {
                 continue;
             }
@@ -167,6 +167,10 @@ public class KCell {
     public boolean isContainedIn(final AbstractGroup group) {
         return groups.contains(group);
     }
+    
+    boolean isContainedIn(KAbstractGroup group) {
+        return groups.contains(group);
+    }
 
     /**
      * Adds a group containing this cell.
@@ -176,7 +180,7 @@ public class KCell {
      * @modifies {@code this}
      * @post {@code isElementOf(group)}
      */
-    void add(final AbstractGroup group) {
+    void add(final KAbstractGroup group) {
         groups.add(group);
     }
 
@@ -220,8 +224,7 @@ public class KCell {
         };
     }
 
-    public Iterable<AbstractGroup> groups() {
+    public Iterable<KAbstractGroup> groups() {
         return groups;
     }
-
 }
