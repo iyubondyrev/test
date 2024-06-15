@@ -1,17 +1,30 @@
 package ypa.command; // <<<<< TODO: Comment this line out when submitting to Momotor!
 
+import java.util.Stack;
+
 /**
  * Facilities for an undo-redo mechanism, on the basis of commands.
  *
-<!--//# BEGIN TODO: Names, student IDs, group name, and date-->
-<p><b>Replace this line</b></p>
-<!--//# END TODO-->
+ * <!--//# BEGIN TODO: Names, student IDs, group name, and date-->
+ * <p><b>Dainius Gelžinis 1995006, Akvilė Lukauskaitė 1953648</b></p>
+ * <p><b>Graded Assignment 60, 15-06-24</b></p>
+ * <!--//# END TODO-->
  */
+
 public class UndoRedo {
 
-//# BEGIN TODO: Representation in terms of instance variables, incl. rep. inv.
-    // Replace this line
-//# END TODO
+    //# BEGIN TODO: Representation in terms of instance variables, incl. rep. inv.
+    private final Stack<Command> doneCommands;
+    
+    private final Stack<Command> undoneCommands;
+    
+    /**
+     * Constructs a new undo-redo manager.
+     */
+    public UndoRedo() {
+        doneCommands = new Stack<>();
+        undoneCommands = new Stack<>();
+    }
 
     /**
      * Returns whether an {@code undo} is possible.
@@ -19,22 +32,16 @@ public class UndoRedo {
      * @return whether {@code undo} is possible
      */
     public boolean canUndo() {
-//# BEGIN TODO: Implementation of canUndo
-        // Replace this line
-        return false;
-//# END TODO
+        return !doneCommands.isEmpty();    
     }
 
     /**
      * Returns whether a {@code redo} is possible.
      *
-     * @return {@code redo().pre}
+     * @return whether {@code redo} is possible
      */
     public boolean canRedo() {
-//# BEGIN TODO: Implementation of canRedo
-        // Replace this line
-        return false;
-//# END TODO
+        return !undoneCommands.isEmpty();
     }
 
     /**
@@ -45,10 +52,10 @@ public class UndoRedo {
      * @pre {@code canUndo()}
      */
     public Command lastDone() throws IllegalStateException {
-//# BEGIN TODO: Implementation of lastDone
-        // Replace this line
-        return null;
-//# END TODO
+        if (!canUndo()) {
+            throw new IllegalStateException("No commands to undo.");
+        }
+        return doneCommands.peek();
     }
 
     /**
@@ -59,10 +66,10 @@ public class UndoRedo {
      * @pre {@code canRedo()}
      */
     public Command lastUndone() throws IllegalStateException {
-//# BEGIN TODO: Implementation of lastUndone
-        // Replace this line
-        return null;
-//# END TODO
+        if (!canRedo()) {
+            throw new IllegalStateException("No commands to redo.");
+        }
+        return undoneCommands.peek();
     }
 
     /**
@@ -71,9 +78,8 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void clear() {
-//# BEGIN TODO: Implementation of clear
-        // Replace this line
-//# END TODO
+        doneCommands.clear();
+        undoneCommands.clear();
     }
 
     /**
@@ -84,9 +90,11 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void did(final Command command) {
-//# BEGIN TODO: Implementation of did
-        // Replace this line
-//# END TODO
+        if (!command.isExecuted()) {
+            command.execute();
+        }
+        doneCommands.push(command);
+        undoneCommands.clear(); // Clear the redo stack when a new command is executed
     }
 
     /**
@@ -98,9 +106,14 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void undo(final boolean redoable) throws IllegalStateException {
-//# BEGIN TODO: Implementation of undo
-        // Replace this line
-//# END TODO
+        if (!canUndo()) {
+            throw new IllegalStateException("No commands to undo.");
+        }
+        Command command = doneCommands.pop();
+        command.revert();
+        if (redoable) {
+            undoneCommands.push(command);
+        }
     }
 
     /**
@@ -111,9 +124,12 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void redo() throws IllegalStateException {
-//# BEGIN TODO: Implementation of redo
-        // Replace this line
-//# END TODO
+        if (!canRedo()) {
+            throw new IllegalStateException("No commands to redo.");
+        }
+        Command command = undoneCommands.pop();
+        command.execute();
+        doneCommands.push(command);
     }
 
     /**
@@ -123,9 +139,9 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void undoAll(final boolean redoable) {
-//# BEGIN TODO: Implementation of undoAll
-        // Replace this line
-//# END TODO
+        while (canUndo()) {
+            undo(redoable);
+        }
     }
 
     /**
@@ -134,9 +150,9 @@ public class UndoRedo {
      * @modifies {@code this}
      */
     public void redoAll() {
-//# BEGIN TODO: Implementation of redoAll
-        // Replace this line
-//# END TODO
+        while (canRedo()) {
+            redo();
+        }
     }
-
 }
+
