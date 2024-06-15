@@ -5,7 +5,7 @@ package ypa.model;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public class Group extends AbstractGroup {
+public class Group extends SAbstractGroup {
 
     @Override
     public boolean isValid() {

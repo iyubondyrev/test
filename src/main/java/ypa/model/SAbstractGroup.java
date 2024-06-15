@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public abstract class AbstractGroup implements Iterable<SCell> {
+public abstract class SAbstractGroup implements Iterable<SCell> {
 
     /** The cells in the group. */
     private final List<SCell> cells;
@@ -29,7 +29,7 @@ public abstract class AbstractGroup implements Iterable<SCell> {
     /**
      * Constructs an empty group.
      */
-    public AbstractGroup() {
+    public SAbstractGroup() {
         cells = new ArrayList<>();
         counts = new Histogram();
         total = 0;

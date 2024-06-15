@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author Dainius Gelzinis 1995006
  */
-public class SGroup extends AbstractGroup {
+public class SGroup extends SAbstractGroup {
 
     private int targetSum;
 

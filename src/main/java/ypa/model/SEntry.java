@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  *
  * @author Akvile Lukauskaite 1953648 (Eindhoven University of Technology)
  */
-public class SEntry extends AbstractGroup {
+public class SEntry extends SAbstractGroup {
 
     /** The location. */
     private final SLocation location;

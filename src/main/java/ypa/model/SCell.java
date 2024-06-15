@@ -31,7 +31,7 @@ public class SCell {
      * The groups to which this cell belongs.
      * The first group will be the whole grid.
      */
-    private final List<AbstractGroup> groups;
+    private final List<SAbstractGroup> groups;
 
     /** Location in the grid, if any. */
     private SLocation location;
@@ -88,7 +88,7 @@ public class SCell {
             throw new IllegalArgumentException(getClass().getSimpleName()
                     + ".setState().pre failed: state == " + state + " < " + BLOCKED);
         }
-        for (AbstractGroup group : groups) {
+        for (SAbstractGroup group : groups) {
             group.update(this, state);
         }
         this.state = state;
@@ -146,7 +146,7 @@ public class SCell {
         if (!this.isFilled()) {
             return true;
         }
-        for (AbstractGroup group : groups) {
+        for (SAbstractGroup group : groups) {
             if (group == grid) {
                 continue;
             }
@@ -163,7 +163,7 @@ public class SCell {
      * @param group  the group to check
      * @return whether {@code this} is element of {@code group}
      */
-    public boolean isContainedIn(final AbstractGroup group) {
+    public boolean isContainedIn(final SAbstractGroup group) {
         return groups.contains(group);
     }
 
@@ -175,7 +175,7 @@ public class SCell {
      * @modifies {@code this}
      * @post {@code isElementOf(group)}
      */
-    void add(final AbstractGroup group) {
+    void add(final SAbstractGroup group) {
         groups.add(group);
     }
 
@@ -219,7 +219,7 @@ public class SCell {
         };
     }
 
-    public Iterable<AbstractGroup> groups() {
+    public Iterable<SAbstractGroup> groups() {
         return groups;
     }
     

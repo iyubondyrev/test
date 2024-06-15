@@ -164,7 +164,7 @@ public class KCell {
      * @param group  the group to check
      * @return whether {@code this} is element of {@code group}
      */
-    public boolean isContainedIn(final AbstractGroup group) {
+    public boolean isContainedIn(final SAbstractGroup group) {
         return groups.contains(group);
     }
     

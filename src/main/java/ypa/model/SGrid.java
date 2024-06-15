@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author Dainius Gelzinis 1995006
  * @author Akvile Lukauskaite 1953648
  */
-public class SGrid extends AbstractGroup implements Iterable<SCell> {
+public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     private List<List<SCell>> grid;
     private List<List<SCell>> matrix;
     protected List<SGroup> groups;
@@ -155,7 +155,7 @@ public class SGrid extends AbstractGroup implements Iterable<SCell> {
      * @post {@code group.contains(cell)}
      */
     public static void associate(
-            final SCell cell, final AbstractGroup group)
+            final SCell cell, final SAbstractGroup group)
             throws IllegalArgumentException {
         if (cell == null) {
             throw new IllegalArgumentException(KGrid.class.getSimpleName()
