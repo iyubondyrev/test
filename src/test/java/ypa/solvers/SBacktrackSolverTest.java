@@ -1,14 +1,16 @@
 package ypa.solvers;
 
-import ypa.solvers.BacktrackSolver;
-import ypa.model.KPuzzle;
-import ypa.reasoning.EntryWithOneEmptyCell;
-import ypa.reasoning.FixpointReasoner;
-import ypa.reasoning.Reasoner;
-import ypa.reasoning.ReasonerTest;
+import ypa.solvers.SBacktrackSolver;
+import ypa.model.SPuzzle;
+import ypa.reasoning.SEntryWithOneEmptyCell;
+import ypa.reasoning.SFixpointReasoner;
+import ypa.reasoning.SReasoner;
+import ypa.reasoning.SReasonerTest;
+import ypa.command.SCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author wstomv
  */
-public class BacktrackSolverTest {
+public class SBacktrackSolverTest {
 
-    private KPuzzle puzzle;
+    private SPuzzle puzzle;
 
     @BeforeEach
     public void setUp() {
-        puzzle = new KPuzzle(new Scanner(ReasonerTest.PUZZLE), "Test");
+        puzzle = new SPuzzle(new Scanner(SReasonerTest.PUZZLE), "Test");
     }
 
     /**
@@ -33,7 +35,7 @@ public class BacktrackSolverTest {
     @Test
     public void testSolveWithoutReasoner() {
         System.out.println("solve w/o reasoner");
-        BacktrackSolver instance = new BacktrackSolver(puzzle, null);
+        SBacktrackSolver instance = new SBacktrackSolver(puzzle, null);
         boolean expResult = true;
         System.out.println(puzzle.gridAsString());
         boolean result = instance.solve();
@@ -41,7 +43,7 @@ public class BacktrackSolverTest {
         assertAll(
                 () -> assertEquals(expResult, result, "return value"),
                 () -> assertTrue(puzzle.isSolved(), "puzzle solved"),
-                () -> assertEquals(4, instance.getCommands().size(), "commands size")
+                () -> assertEquals(9, instance.getCommands().size(), "commands size")
         );
     }
 
@@ -51,16 +53,17 @@ public class BacktrackSolverTest {
     @Test
     public void testSolveWithSimpleReasoner() {
         System.out.println("solve with simple reasoner");
-        Reasoner reasoner = new EntryWithOneEmptyCell(puzzle);
-        BacktrackSolver instance = new BacktrackSolver(puzzle, reasoner);
+        SReasoner reasoner = new SEntryWithOneEmptyCell(puzzle);
+        SBacktrackSolver instance = new SBacktrackSolver(puzzle, reasoner);
         boolean expResult = true;
         System.out.println(puzzle.gridAsString());
         boolean result = instance.solve();
         System.out.println(puzzle.gridAsString());
+
         assertAll(
                 () -> assertEquals(expResult, result, "return value"),
                 () -> assertTrue(puzzle.isSolved(), "puzzle solved"),
-                () -> assertEquals(5, instance.getCommands().size(), "commands size")
+                () -> assertEquals(15, instance.getCommands().size(), "commands size")
         );
     }
 
@@ -70,9 +73,9 @@ public class BacktrackSolverTest {
     @Test
     public void testSolveWithFixpointReasoner() {
         System.out.println("solve with fixpoint");
-        Reasoner reasoner = new EntryWithOneEmptyCell(puzzle);
-        reasoner = new FixpointReasoner(puzzle, reasoner);
-        BacktrackSolver instance = new BacktrackSolver(puzzle, reasoner);
+        SReasoner reasoner = new SEntryWithOneEmptyCell(puzzle);
+        reasoner = new SFixpointReasoner(puzzle, reasoner);
+        SBacktrackSolver instance = new SBacktrackSolver(puzzle, reasoner);
         boolean expResult = true;
         System.out.println(puzzle.gridAsString());
         boolean result = instance.solve();
@@ -80,8 +83,7 @@ public class BacktrackSolverTest {
         assertAll(
                 () -> assertEquals(expResult, result, "return value"),
                 () -> assertTrue(puzzle.isSolved(), "puzzle solved"),
-                () -> assertEquals(3, instance.getCommands().size(), "commands size")
+                () -> assertEquals(11, instance.getCommands().size(), "commands size")
         );
     }
-
 }

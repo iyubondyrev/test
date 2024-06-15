@@ -215,6 +215,18 @@ public class SPuzzle {
     public Mode getMode() {
         return mode;
     }
+    
+    /**
+     * Gets number of cells with a given state.
+     *
+     * @param state  the given state
+     * @return number of cells with state {@code state}
+     * @post {@code \result == (\num_of Cell cell : getCells();
+     *   cell.getState() == state)}
+     */
+    public int getStateCount(final int state) {
+        return grid.getStateCount(state);
+    }
 
     /**
      * Sets the mode of this puzzle.

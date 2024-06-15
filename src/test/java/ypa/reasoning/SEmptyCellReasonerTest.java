@@ -1,9 +1,9 @@
 package ypa.reasoning;
 
-import ypa.reasoning.EmptyCellReasoner;
-import ypa.command.CompoundCommand;
-import ypa.model.KCell;
-import ypa.model.KPuzzle;
+import ypa.reasoning.SEmptyCellReasoner;
+import ypa.command.SCompoundCommand;
+import ypa.model.SCell;
+import ypa.model.SPuzzle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,17 +12,17 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test cases for {@link EmptyCellReasoner}.
+ * Test cases for {@link SEmptyCellReasoner}.
  *
  * @author wstomv
  */
-public class EmptyCellReasonerTest {
+public class SEmptyCellReasonerTest {
 
-    private KPuzzle puzzle;
+    private SPuzzle puzzle;
 
     @BeforeEach
     public void setUp() {
-        puzzle = new KPuzzle(new Scanner(ReasonerTest.PUZZLE), "Test");
+        puzzle = new SPuzzle(new Scanner(SReasonerTest.PUZZLE), "Test");
     }
 
     /**
@@ -31,9 +31,9 @@ public class EmptyCellReasonerTest {
     @Test
     public void testApplyToCell() {
         System.out.println("applyToCell");
-        EmptyCellReasoner instance = new EmptyCellReasonerImpl(puzzle);
-        KCell cell = puzzle.getCell(1, 1);
-        CompoundCommand result = instance.applyToCell(cell);
+        SEmptyCellReasoner instance = new SEmptyCellReasonerImpl(puzzle);
+        SCell cell = puzzle.getCell(0, 0);
+        SCompoundCommand result = instance.applyToCell(cell);
         assertAll(
                 () -> assertEquals(0, result.size(), "result.size()"),
                 () -> assertFalse(result.isExecuted(), "result.executed")
@@ -46,16 +46,16 @@ public class EmptyCellReasonerTest {
     @Test
     public void testApply() {
         System.out.println("apply");
-        EmptyCellReasoner instance = new EmptyCellReasonerImpl(puzzle);
-        CompoundCommand result = instance.apply();
+        SEmptyCellReasoner instance = new SEmptyCellReasonerImpl(puzzle);
+        SCompoundCommand result = instance.apply();
         assertAll(
                 () -> assertEquals(0, result.size(), "result.size()"),
                 () -> assertTrue(result.isExecuted(), "result.executed")
         );
     }
 
-    private static class EmptyCellReasonerImpl extends EmptyCellReasoner {
-        public EmptyCellReasonerImpl(KPuzzle puzzle) {
+    private static class SEmptyCellReasonerImpl extends SEmptyCellReasoner {
+        public SEmptyCellReasonerImpl(SPuzzle puzzle) {
             super(puzzle);
         }
     }
