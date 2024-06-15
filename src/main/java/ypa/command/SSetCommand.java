@@ -9,7 +9,7 @@ import java.util.Collection;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public class SSetCommand extends GenericCommand<SCell> {
+public class SSetCommand extends SGenericCommand<SCell> {
 
 // Representation of command state
     /** The command's parameter. */
