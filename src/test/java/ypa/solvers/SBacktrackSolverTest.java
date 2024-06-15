@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test cases for {@link BacktrackSolver}.
  *
- * @author wstomv
+ * @author Aleksandr Vardanian 1942263
+ * @author Aleksandr Nikolaev 2001675
  */
 public class SBacktrackSolverTest {
 

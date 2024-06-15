@@ -53,4 +53,8 @@ public class SLocation {
     public String toString() {
         return String.format("%c %d", (char) (row + "a".charAt(0)), column + 1);
     }
+
+    public String toStringLong() {
+        return String.format("{ row: %c, column: %d }", (char) (row + "a".charAt(0)), column + 1);
+    }
 }
