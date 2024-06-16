@@ -116,6 +116,24 @@ public class SPuzzle {
     }
 
     /**
+     * Gets the cells in this puzzle, so as to iterate over them.
+     *
+     * @return the cells of this puzzle as iterable
+     */
+    public Iterable<SCell> getCells() {
+        return grid;
+    }
+
+    /**
+     * Checks whether the current state of the puzzle is valid.
+     *
+     * @return whether the current state of this puzzle is valid
+     */
+    public boolean isValid() {
+        return grid.isValid();
+    }
+
+    /**
      * Clears all the cells in the puzzle, resetting them to their initial state.
      * 
      * @pre true
