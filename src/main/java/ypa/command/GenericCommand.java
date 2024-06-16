@@ -13,7 +13,7 @@ package ypa.command;
  *
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
-public class GenericCommand<R> extends Command {
+public class GenericCommand<R> extends SCommand {
 
     /** The receiving object. */
     protected final R receiver;

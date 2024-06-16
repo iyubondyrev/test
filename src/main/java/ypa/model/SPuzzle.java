@@ -1,6 +1,7 @@
 package ypa.model;
 
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Represents the Sujiko puzzle, managing the grid and its state.
@@ -12,6 +13,18 @@ public class SPuzzle {
     private SGrid grid;
     private int minNumber = 1;
     private int maxNumber = 9;
+    
+    private Mode mode;
+
+    
+    public enum Mode {
+        /** When puzzle can be edited. */
+        EDIT,
+        /** When puzzle can be solved, but not edited. */
+        SOLVE,
+        /** When puzzle can only be viewed, but not changed. */
+        VIEW
+    }
 
     /**
      * Constructs a new puzzle with the specified name and grid.
@@ -29,6 +42,30 @@ public class SPuzzle {
     public String getName() {
         return name;
     }
+    
+    /**
+     * Gets the entries in this puzzle, so as to iterate over them.
+     *
+     * @return the entries of this puzzle as iterable
+     */
+    public Iterable<SEntry> getEntries() {
+        return grid.getEntries();
+    }
+    
+    /**
+     * Constructs a new puzzle with initial state read from given scanner,
+     * and with a given name.
+     * The actual dimensions are determined from the input.
+     *
+     * @param scanner  the given scanner
+     * @param name  the given name
+     */
+    public SPuzzle(final Scanner scanner, final String name) {
+        this.name = name;
+        this.mode = SPuzzle.Mode.VIEW;
+        this.grid = new SGrid(scanner);
+    }
+
 
     /**
      * Sets the name of the puzzle.
@@ -99,7 +136,7 @@ public class SPuzzle {
      * @post result == grid.isSolved()
      */
     public boolean isSolved() {
-        return grid.isSolved();
+        return grid.isValid() && grid.isFull();
     }
 
     /**
@@ -108,7 +145,7 @@ public class SPuzzle {
      * @param row the row of the cell.
      * @param col the column of the cell.
      * @return the cell at the specified row and column.
-     * @pre 0 <= row < 3 && 0 <= col < 3
+     * @pre 0 <= row < 5 && 0 <= col < 5
      * @post result == grid.getCell(row, col)
      */
     public SCell getCell(int row, int col) {
@@ -140,6 +177,51 @@ public class SPuzzle {
      * @post all cells in the grid are cleared
      */
     public void clear() {
-        grid.groups.forEach(sGroup -> sGroup.clear());
+        grid.entries.forEach(sEntry -> sEntry.clear());
+    }
+    
+    /**
+     * Gets the number of columns in this puzzle.
+     *
+     * @return number of columns
+     */
+    public int getColumnCount() {
+        return grid.getColumnCount();
+    }
+
+    /**
+     * Gets the number of rows in this puzzle.
+     *
+     * @return number of rows
+     */
+    public int getRowCount() {
+        return grid.getRowCount();
+    }
+    
+    public boolean has(final int rowIndex, final int columnIndex) {
+        return 0 <= rowIndex && rowIndex < grid.getRowCount()
+                && 0 <= columnIndex && columnIndex < grid.getColumnCount();
+    }
+    
+    public Mode getMode() {
+        return mode;
+    }
+
+    /**
+     * Sets the mode of this puzzle.
+     *
+     * @param mode the new mode
+     */
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+    
+    public String gridAsString() {
+        return grid.gridAsString();
+    }
+
+    @Override
+    public String toString() {
+        return grid.toString();
     }
 }

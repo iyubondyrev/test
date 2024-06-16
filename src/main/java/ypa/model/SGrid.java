@@ -7,8 +7,8 @@ import java.util.Scanner;
 /**
  * Represents a grid in the Sujiko puzzle.
  * This class manages the grid and the groups within it.
- * Our grid dimensions are 5x5 where (2, 2), (2, 4), (4, 2) and (4, 4) 
- * are the sums, other cells that have an even number in their 
+ * Our grid dimensions are 5x5 where (1, 1), (1, 3), (3, 1) and (3, 3) 
+ * are the sums, other cells that have an odd number in their 
  * locations are blocked.
  * 
  * @author Dainius Gelzinis 1995006
@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     private List<List<SCell>> grid;
     private List<List<SCell>> matrix;
-    protected List<SGroup> groups;
+    //protected List<SGroup> groups;
     
     /** Number of rows. */
     private final int nRows = 5;
@@ -26,8 +26,9 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     private final int nColumns = 5;
     
     /** The entry specifications. TODO: Should be final but gives error*/
-    private List<SEntry> entries;
+    protected List<SEntry> entries;
 
+    
     /**
      * Constructs a grid with the specified groups.
      *
@@ -35,7 +36,7 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
      * @pre groups != null
      * @post this.groups == groups
      */
-    public SGrid(List<SGroup> groups) {
+    /*public SGrid(List<SGroup> groups) {
         this.groups = groups;
         grid = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -45,7 +46,7 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
             }
             grid.add(row);
         }
-    }
+    }*/
     
     /**
      * Constructs a grid from given scanner.
@@ -79,19 +80,16 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         // 3. define the cell states and associate them
         for (SEntry entry: entries) {
             SLocation loc = entry.getLocation();
-            for (int i = 0; i < entries.size(); ++i) {
-                squareGroups(loc, entry);
+                //squareGroups(loc, entry);
                 //so if our location was (2, 2) then now it is (1, 1)
-                loc = new SLocation(loc.getRow() - 1, loc.getColumn() - 1);
-                squareGroups(loc, entry);
-                loc = new SLocation(loc.getRow() - 1, loc.getColumn() + 1);
-                squareGroups(loc, entry);
-                loc = new SLocation(loc.getRow() + 1, loc.getColumn() - 1);
-                squareGroups(loc, entry);
-                loc = new SLocation(loc.getRow() + 1, loc.getColumn() + 1);
-                squareGroups(loc, entry);
-            }
-            
+            SLocation loc_1 = new SLocation(loc.getRow() - 1, loc.getColumn() - 1);
+            squareGroups(loc_1, entry);
+            SLocation loc_2 = new SLocation(loc.getRow() - 1, loc.getColumn() + 1);
+            squareGroups(loc_2, entry);
+            SLocation loc_3 = new SLocation(loc.getRow() + 1, loc.getColumn() - 1);
+            squareGroups(loc_3, entry);
+            SLocation loc_4 = new SLocation(loc.getRow() + 1, loc.getColumn() + 1);
+            squareGroups(loc_4, entry); 
         }
         
     }
@@ -105,6 +103,9 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         final SCell cell = getCell(loc);
         cell.setState(SCell.EMPTY); // must be done before associate
         associate(cell, entry);
+        if (loc.getRow() == entry.getLocation().getRow() && loc.getColumn() == entry.getLocation().getColumn()) {
+           cell.setState(SCell.BLOCKED);
+        }
     }
     
     /**
@@ -133,16 +134,6 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         return getCell(location.getRow(), location.getColumn());
     }
 
-    /**
-     * Checks if the grid is solved.
-     *
-     * @return true if all groups in the grid are valid, false otherwise.
-     * @pre true
-     * @post result == true if all groups are valid, false otherwise
-     */
-    public boolean isSolved() {
-        return groups.stream().allMatch(SGroup::isValid);
-    }
     
     /**
      * Puts a cell in a group.
@@ -158,21 +149,25 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
             final SCell cell, final SAbstractGroup group)
             throws IllegalArgumentException {
         if (cell == null) {
-            throw new IllegalArgumentException(KGrid.class.getSimpleName()
+            throw new IllegalArgumentException(SGrid.class.getSimpleName()
                     + ".associate.pre failed: cell == null");
         }
         if (group == null) {
-            throw new IllegalArgumentException(KGrid.class.getSimpleName()
+            throw new IllegalArgumentException(SGrid.class.getSimpleName()
                     + ".associate.pre failed: group == null");
         }
-        if (cell.isContainedIn(group)) {
-            throw new IllegalArgumentException(KGrid.class.getSimpleName()
+        
+        // TODO I have commented it out because we in our case several cells
+        // can belong to one group
+        
+        /*if (cell.isContainedIn(group)) {
+            throw new IllegalArgumentException(SGrid.class.getSimpleName()
                     + ".associate.pre failed: cell is already associated with group");
         }
         if (group.contains(cell)) {
-            throw new IllegalArgumentException(KGrid.class.getSimpleName()
+            throw new IllegalArgumentException(SGrid.class.getSimpleName()
                     + ".associate.pre failed: group already contains cell");
-        }
+        }*/
         group.add(cell);
         cell.add(group);
     }
@@ -215,6 +210,11 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
                 return false;
             }
         }
+        for (int i = 0; i != 10; ++i) {
+            if (this.getStateCount(i) > 1) {
+                return false;
+            }
+        }
         return true;
     }
     
@@ -227,7 +227,7 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     public void clear() {
         for (final SCell cell : this) {
             if (!cell.isBlocked()) {
-                cell.setState(KCell.EMPTY);
+                cell.setState(SCell.EMPTY);
             }
         }
     }

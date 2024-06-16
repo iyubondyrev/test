@@ -14,9 +14,9 @@ import java.util.Stack;
 public class UndoRedo {
 
     //# BEGIN TODO: Representation in terms of instance variables, incl. rep. inv.
-    private final Stack<Command> doneCommands;
+    private final Stack<SCommand> doneCommands;
     
-    private final Stack<Command> undoneCommands;
+    private final Stack<SCommand> undoneCommands;
     
     /**
      * Constructs a new undo-redo manager.
@@ -51,7 +51,7 @@ public class UndoRedo {
      * @throws IllegalStateException if precondition failed
      * @pre {@code canUndo()}
      */
-    public Command lastDone() throws IllegalStateException {
+    public SCommand lastDone() throws IllegalStateException {
         if (!canUndo()) {
             throw new IllegalStateException("No commands to undo.");
         }
@@ -65,7 +65,7 @@ public class UndoRedo {
      * @throws IllegalStateException if precondition failed
      * @pre {@code canRedo()}
      */
-    public Command lastUndone() throws IllegalStateException {
+    public SCommand lastUndone() throws IllegalStateException {
         if (!canRedo()) {
             throw new IllegalStateException("No commands to redo.");
         }
@@ -89,7 +89,7 @@ public class UndoRedo {
      * @param command the command to incorporate
      * @modifies {@code this}
      */
-    public void did(final Command command) {
+    public void did(final SCommand command) {
         if (!command.isExecuted()) {
             command.execute();
         }
@@ -109,7 +109,7 @@ public class UndoRedo {
         if (!canUndo()) {
             throw new IllegalStateException("No commands to undo.");
         }
-        Command command = doneCommands.pop();
+        SCommand command = doneCommands.pop();
         command.revert();
         if (redoable) {
             undoneCommands.push(command);
@@ -127,7 +127,7 @@ public class UndoRedo {
         if (!canRedo()) {
             throw new IllegalStateException("No commands to redo.");
         }
-        Command command = undoneCommands.pop();
+        SCommand command = undoneCommands.pop();
         command.execute();
         doneCommands.push(command);
     }

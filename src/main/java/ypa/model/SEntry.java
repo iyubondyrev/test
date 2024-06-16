@@ -77,6 +77,12 @@ public class SEntry extends SAbstractGroup {
         }
         super.add(cell);
     }
+    
+    void clear() {
+        for (SCell cell: this) {
+            cell.setState(SCell.EMPTY);
+        }
+    }
 
     @Override
     public boolean isValid() {
@@ -88,7 +94,7 @@ public class SEntry extends SAbstractGroup {
             }
         }
         final int total = this.getTotal();
-        final int emptyCount = this.getStateCount(KCell.EMPTY);
+        final int emptyCount = this.getStateCount(SCell.EMPTY);
         final int expectedSum = this.specification.getSum();
         if (total + emptyCount > expectedSum) {
             // sum of digits filled in is too high

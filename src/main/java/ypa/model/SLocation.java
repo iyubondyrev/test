@@ -17,12 +17,12 @@ public class SLocation {
      *
      * @param row the given row coordinate
      * @param column the given column coordinate
-     * @pre 0 <= row < 3 && 0 <= column < 3
+     * @pre 0 <= row < 5 && 0 <= column < 5
      * @post this.row == row && this.column == column
      */
     public SLocation(final int row, final int column) {
-        if (row < 0 || row >= 3 || column < 0 || column >= 3) {
-            throw new IllegalArgumentException("Row and column must be between 0 and 2.");
+        if (row < 0 || row >= 5 || column < 0 || column >= 5) {
+            throw new IllegalArgumentException("Row and column must be between 0 and 4.");
         }
         this.row = row;
         this.column = column;
@@ -36,9 +36,9 @@ public class SLocation {
         Pattern original = scanner.delimiter();
         scanner.skip("\\p{javaWhitespace}*");
         scanner.useDelimiter("");
-        row = scanner.next("[a-zA-Z]").toLowerCase().charAt(0) - 'a' + 1;
+        row = scanner.next("[a-zA-Z]").toLowerCase().charAt(0) - 'a';
         scanner.useDelimiter(original);
-        column = scanner.nextInt();
+        column = scanner.nextInt() - 1;
     }
 
     public int getRow() {
@@ -51,6 +51,6 @@ public class SLocation {
 
     @Override
     public String toString() {
-        return String.format("(%d, %d)", row, column);
+        return String.format("%c %d", (char) (row + "a".charAt(0)), column + 1);
     }
 }
