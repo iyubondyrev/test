@@ -148,6 +148,9 @@ public class SCell {
         }
         for (SAbstractGroup group : groups) {
             if (group == grid) {
+                if (grid.hasDuplicates()) {
+                    return false;
+                }
                 continue;
             }
             if (!group.isValid()) {

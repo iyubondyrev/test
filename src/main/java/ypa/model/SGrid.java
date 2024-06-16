@@ -202,6 +202,15 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     public boolean isFull() {
         return this.getStateCount(SCell.EMPTY) == 0;
     }
+
+    public boolean hasDuplicates() {
+        for (int i = 1; i != 10; ++i) {
+            if (this.getStateCount(i) > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     @Override
     public boolean isValid() {
@@ -210,12 +219,7 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
                 return false;
             }
         }
-        for (int i = 0; i != 10; ++i) {
-            if (this.getStateCount(i) > 1) {
-                return false;
-            }
-        }
-        return true;
+        return true && !hasDuplicates();
     }
     
     /**
