@@ -29,24 +29,24 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     protected List<SEntry> entries;
 
     
-    /**
-     * Constructs a grid with the specified groups.
-     *
-     * @param groups the list of groups in the grid.
-     * @pre groups != null
-     * @post this.groups == groups
-     */
-    /*public SGrid(List<SGroup> groups) {
-        this.groups = groups;
-        grid = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            List<SCell> row = new ArrayList<>();
-            for (int j = 0; j < 3; j++) {
-                row.add(new SCell(SCell.BLOCKED));
-            }
-            grid.add(row);
-        }
-    }*/
+    // /**
+    //  * Constructs a grid with the specified groups.
+    //  *
+    //  * @param groups the list of groups in the grid.
+    //  * @pre groups != null
+    //  * @post this.groups == groups
+    //  */
+    // public SGrid(List<SGroup> groups) {
+    //     this.groups = groups;
+    //     grid = new ArrayList<>();
+    //     for (int i = 0; i < 3; i++) {
+    //         List<SCell> row = new ArrayList<>();
+    //         for (int j = 0; j < 3; j++) {
+    //             row.add(new SCell(SCell.BLOCKED));
+    //         }
+    //         grid.add(row);
+    //     }
+    // }
     
     /**
      * Constructs a grid from given scanner.
@@ -82,14 +82,14 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
             SLocation loc = entry.getLocation();
                 //squareGroups(loc, entry);
                 //so if our location was (2, 2) then now it is (1, 1)
-            SLocation loc_1 = new SLocation(loc.getRow() - 1, loc.getColumn() - 1);
-            squareGroups(loc_1, entry);
-            SLocation loc_2 = new SLocation(loc.getRow() - 1, loc.getColumn() + 1);
-            squareGroups(loc_2, entry);
-            SLocation loc_3 = new SLocation(loc.getRow() + 1, loc.getColumn() - 1);
-            squareGroups(loc_3, entry);
-            SLocation loc_4 = new SLocation(loc.getRow() + 1, loc.getColumn() + 1);
-            squareGroups(loc_4, entry); 
+            SLocation loc1 = new SLocation(loc.getRow() - 1, loc.getColumn() - 1);
+            squareGroups(loc1, entry);
+            SLocation loc2 = new SLocation(loc.getRow() - 1, loc.getColumn() + 1);
+            squareGroups(loc2, entry);
+            SLocation loc3 = new SLocation(loc.getRow() + 1, loc.getColumn() - 1);
+            squareGroups(loc3, entry);
+            SLocation loc4 = new SLocation(loc.getRow() + 1, loc.getColumn() + 1);
+            squareGroups(loc4, entry); 
         }
         
     }
@@ -103,8 +103,12 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         final SCell cell = getCell(loc);
         cell.setState(SCell.EMPTY); // must be done before associate
         associate(cell, entry);
-        if (loc.getRow() == entry.getLocation().getRow() && loc.getColumn() == entry.getLocation().getColumn()) {
-           cell.setState(SCell.BLOCKED);
+
+        boolean rowCorrect = loc.getRow() == entry.getLocation().getRow();
+        boolean columnCorrect = loc.getColumn() == entry.getLocation().getColumn();
+
+        if (rowCorrect && columnCorrect) {
+            cell.setState(SCell.BLOCKED);
         }
     }
     
@@ -134,7 +138,6 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         return getCell(location.getRow(), location.getColumn());
     }
 
-    
     /**
      * Puts a cell in a group.
      *
@@ -203,6 +206,9 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
         return this.getStateCount(SCell.EMPTY) == 0;
     }
 
+    /**
+     * Check whether grid has duplicated cells.
+     */
     public boolean hasDuplicates() {
         for (int i = 1; i != 10; ++i) {
             if (this.getStateCount(i) > 1) {
@@ -219,7 +225,8 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
                 return false;
             }
         }
-        return true && !hasDuplicates();
+        
+        return !hasDuplicates();
     }
     
     /**

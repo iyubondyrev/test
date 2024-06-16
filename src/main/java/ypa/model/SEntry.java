@@ -78,6 +78,9 @@ public class SEntry extends SAbstractGroup {
         super.add(cell);
     }
     
+    /**
+     * Make all cells empty.
+     */
     void clear() {
         for (SCell cell: this) {
             cell.setState(SCell.EMPTY);

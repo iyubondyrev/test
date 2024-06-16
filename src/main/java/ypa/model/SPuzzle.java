@@ -16,7 +16,9 @@ public class SPuzzle {
     
     private Mode mode;
 
-    
+    /**
+     * Enum of working modes for puzzle.
+     */
     public enum Mode {
         /** When puzzle can be edited. */
         EDIT,
@@ -65,7 +67,6 @@ public class SPuzzle {
         this.mode = SPuzzle.Mode.VIEW;
         this.grid = new SGrid(scanner);
     }
-
 
     /**
      * Sets the name of the puzzle.
@@ -198,6 +199,13 @@ public class SPuzzle {
         return grid.getRowCount();
     }
     
+    /**
+     * Check whether puzzle have a cell with indicate row and column.
+     * 
+     * @param rowIndex index of row.
+     * @param columnIndex index of column.
+     * @return If puzzle has indicated cell, true. Otherwise, false.
+     */
     public boolean has(final int rowIndex, final int columnIndex) {
         return 0 <= rowIndex && rowIndex < grid.getRowCount()
                 && 0 <= columnIndex && columnIndex < grid.getColumnCount();
