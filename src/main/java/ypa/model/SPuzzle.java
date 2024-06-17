@@ -216,7 +216,6 @@ public class SPuzzle {
         return mode;
     }
 
-
     /**
      * Sets the mode of this puzzle.
      *

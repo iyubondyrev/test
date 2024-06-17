@@ -7,8 +7,8 @@ import java.util.Scanner;
 /**
  * Represents a grid in the Sujiko puzzle.
  * This class manages the grid and the groups within it.
- * Our grid dimensions are 5x5 where (1, 1), (1, 3), (3, 1) and (3, 3) 
- * are the sums, other cells that have an odd number in their 
+ * Our grid dimensions are 5x5 where (2, 2), (2, 4), (4, 2) and (4, 4) 
+ * are the sums, other cells that have an even number in their 
  * locations are blocked.
  * 
  * @author Dainius Gelzinis 1995006
@@ -111,23 +111,35 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
             cell.setState(SCell.BLOCKED);
         }
     }
-
+    
+    /**
+     * Blocks all cells and empties entry cells.
+     */
+    
     public void blockAllAndEmptyEntries() {
         for (SCell cell: this) {
             cell.setState(SCell.BLOCKED);
         }
 
         for (SEntry entry: this.getEntries()) {
-            SCell cell = this.getCell(entry.getLocation().getRow(), entry.getLocation().getColumn());
+            SCell cell = this.getCell(entry.getLocation().getRow(), 
+                entry.getLocation().getColumn());
             cell.setState(SCell.EMPTY);
         }
     }
 
+    /**
+     * Returns the grid to its default state.
+     * 
+     * @throws IllegalArgumentException if sums cells are not between 10 and 30
+     */
+    
     public void returnToTheDefaultState() throws IllegalArgumentException {
         for (SEntry entry: this.getEntries()) {
             SLocation loc = entry.getLocation();
             SCell entryCell = this.getCell(loc.getRow(), loc.getColumn());
-            if (!(10 <= entry.getSpecification().getSum() && entry.getSpecification().getSum() <= 30)) {
+            if (!(10 <= entry.getSpecification().getSum()
+                   && entry.getSpecification().getSum() <= 30)) {
                 throw new IllegalArgumentException("Sums cells must not be between 10 and 30");
             }
 
@@ -257,7 +269,8 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     @Override
     public boolean isValid() {
         for (SEntry entry : entries) {
-            SCell entryCell = this.getCell(entry.getLocation().getRow(), entry.getLocation().getColumn());
+            SCell entryCell = this.getCell(entry.getLocation().getRow(),
+                    entry.getLocation().getColumn());
             if (!entryCell.isBlocked()) {
                 return false;
             }
