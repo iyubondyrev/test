@@ -5,7 +5,10 @@ import ypa.command.SCompoundCommand;
 import ypa.command.SSetCommand;
 import ypa.command.SUndoRedo;
 import ypa.model.SCell;
+import ypa.model.SEntry;
+import ypa.model.SLocation;
 import ypa.model.SPuzzle;
+import ypa.model.SSpec;
 import ypa.reasoning.SBasicEmptyCellByContradiction;
 import ypa.reasoning.SEntryWithOneEmptyCell;
 import ypa.reasoning.SFixpointReasoner;
@@ -15,6 +18,7 @@ import ypa.solvers.SBacktrackSolver;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -24,6 +28,8 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Scanner;
+
+import ypa.model.SLocation;
 
 /**
  * Main frame for Sujiko Puzzle Assistant,
@@ -515,6 +521,31 @@ public class MainFrame extends javax.swing.JFrame {
             this.puzzlePanel.setSelected(cell);
             jTextArea.append("Selected cell " + cell.getLocation().toString()
                     + "\n");
+            updateFrame();
+            if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
+                String input = JOptionPane.showInputDialog(this, "Enter the sum, number between 10 and 30", "Input Sum", JOptionPane.PLAIN_MESSAGE);
+                int sum = -1;
+                if (input == null || input.isEmpty()) {
+                    return;
+                }
+                try {
+                    sum = Integer.parseInt(input);
+                    if (!(sum >= 10 && sum <= 30)) {
+                        throw new NumberFormatException("Bad sum");
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                for (SEntry entry: puzzle.getEntries()) {
+                    SLocation entryLoc = entry.getLocation();
+                    if (cell.getLocation().getRow() == entryLoc.getRow() && cell.getLocation().getColumn() == entryLoc.getColumn()) {
+                        entry.setSpecification(new SSpec(sum));
+                    }
+                }
+                updateFrame();
+                return;
+            }
         } else {
             this.puzzlePanel.setSelected(null);
         }
@@ -751,6 +782,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         } else {
             message = "Puzzle not solvable";
+        }
+        if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
+            message = "To solve the puzzle you need to exit Edit mode";
         }
         jTextArea.append(message + "\n");
         updateFrame();

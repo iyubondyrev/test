@@ -21,7 +21,7 @@ public class SSpec {
      * @param sum  the given sum
      */
     public SSpec(final int sum) {
-        assert 0 <= sum : "Spec.pre failed: sum " + sum + " < 0";
+        assert sum >= 10 && sum <= 30 : "Spec.pre failed: sum " + sum + " not in [10, 30]";
         this.sum = sum;
     }
 

@@ -31,7 +31,7 @@ public class SEntry extends SAbstractGroup {
     private final SLocation location;
 
     /** The specification. */
-    private final SSpec specification;
+    private SSpec specification;
 
     /**
      * Constructs a {@code SEntry} from a given location, direction, and
@@ -61,6 +61,10 @@ public class SEntry extends SAbstractGroup {
 
     public SSpec getSpecification() {
         return specification;
+    }
+
+    public void setSpecification(SSpec spec) {
+        this.specification = spec;
     }
 
     /**

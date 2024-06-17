@@ -111,6 +111,42 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
             cell.setState(SCell.BLOCKED);
         }
     }
+
+    public void blockAllAndEmptyEntries() {
+        for (SCell cell: this) {
+            cell.setState(SCell.BLOCKED);
+        }
+
+        for (SEntry entry: this.getEntries()) {
+            SCell cell = this.getCell(entry.getLocation().getRow(), entry.getLocation().getColumn());
+            cell.setState(SCell.EMPTY);
+        }
+    }
+
+    public void returnToTheDefaultState() throws IllegalArgumentException {
+        for (SEntry entry: this.getEntries()) {
+            SLocation loc = entry.getLocation();
+            SCell entryCell = this.getCell(loc.getRow(), loc.getColumn());
+            if (!(10 <= entry.getSpecification().getSum() && entry.getSpecification().getSum() <= 30)) {
+                throw new IllegalArgumentException("Sums cells must not be between 10 and 30");
+            }
+
+            entryCell.setState(SCell.BLOCKED);
+
+            for (int i = - 1; i <= 1; ++i) {
+                for (int j = -1; j <= 1; ++j) {
+                    if (i * j == 0) {
+                        continue;
+                    }
+                    SLocation cellLoc = new SLocation(loc.getRow() + i, loc.getColumn() + j);
+                    SCell cell = this.getCell(cellLoc);
+                    cell.setState(SCell.EMPTY);
+                }
+                
+            }
+        }
+        
+    }
     
     /**
      * Gets the cell at given coordinates.
@@ -221,6 +257,10 @@ public class SGrid extends SAbstractGroup implements Iterable<SCell> {
     @Override
     public boolean isValid() {
         for (SEntry entry : entries) {
+            SCell entryCell = this.getCell(entry.getLocation().getRow(), entry.getLocation().getColumn());
+            if (!entryCell.isBlocked()) {
+                return false;
+            }
             if (!entry.isValid()) {
                 return false;
             }

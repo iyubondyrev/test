@@ -1,14 +1,18 @@
 package ypa.gui;
 
-import ypa.model.SCell;
-import ypa.model.SEntry;
-import ypa.model.SPuzzle;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import ypa.model.SCell;
+import ypa.model.SEntry;
+import ypa.model.SPuzzle;
+import ypa.model.SPuzzle.Mode;
 
 /**
  * A graphical view on a Kakuro puzzle state.
@@ -220,6 +224,9 @@ public class PuzzlePanel extends javax.swing.JPanel {
         }
         // draw entries sums
         g.setColor(Color.WHITE);
+        if (puzzle.getMode() == Mode.EDIT) {
+            g.setColor(Color.BLACK);
+        }
         g.setFont(new Font("Lucida Sans Typewriter", Font.PLAIN, 12));
         for (SEntry entry : puzzle.getEntries()) {
             final int row = entry.getLocation().getRow();

@@ -1,7 +1,8 @@
 package ypa.model;
 
-import java.util.List;
 import java.util.Scanner;
+
+import ypa.model.SPuzzle.Mode;
 
 /**
  * Represents the Sujiko puzzle, managing the grid and its state.
@@ -137,7 +138,7 @@ public class SPuzzle {
      * @post result == grid.isSolved()
      */
     public boolean isSolved() {
-        return grid.isValid() && grid.isFull();
+        return this.isValid() && grid.isFull();
     }
 
     /**
@@ -168,7 +169,7 @@ public class SPuzzle {
      * @return whether the current state of this puzzle is valid
      */
     public boolean isValid() {
-        return grid.isValid();
+        return grid.isValid() && (this.mode == Mode.VIEW || this.mode == Mode.SOLVE);
     }
 
     /**
@@ -215,13 +216,26 @@ public class SPuzzle {
         return mode;
     }
 
+
     /**
      * Sets the mode of this puzzle.
      *
      * @param mode the new mode
      */
     public void setMode(Mode mode) {
+        
+
+        if (this.mode != Mode.EDIT && mode == Mode.EDIT) {
+
+            this.clear();
+            this.grid.blockAllAndEmptyEntries();
+
+        } else if (this.mode == Mode.EDIT && mode != Mode.EDIT) {
+            this.grid.returnToTheDefaultState();
+        }
+
         this.mode = mode;
+ 
     }
     
     public String gridAsString() {
