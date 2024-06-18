@@ -64,7 +64,7 @@ public class SEntryWithOneEmptyCellTest {
         SCell cell00 = puzzle.getCell(0, 2);
         SCell cell02 = puzzle.getCell(0, 4);
         SCell cell20 = puzzle.getCell(2, 2);
-        SCell cell22 = puzzle.getCell(2, 4);
+        SCell cell24 = puzzle.getCell(2, 4);
         cell00.setState(6);
         cell02.setState(4);
         cell20.setState(7);
@@ -75,7 +75,7 @@ public class SEntryWithOneEmptyCellTest {
         assertAll(
                 () -> assertEquals(1, result.size(), "result.size()"),
                 () -> assertTrue(result.isExecuted(), "result.executed"),
-                () -> assertEquals(1, cell22.getState(), "cell 2, 4 state")
+                () -> assertEquals(1, cell24.getState(), "cell 2, 4 state")
         );
     }
 }
