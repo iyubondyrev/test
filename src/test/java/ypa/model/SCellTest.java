@@ -18,6 +18,9 @@ public class SCellTest {
     private SCell emptyCell;
     private SCell filledCell;
     
+    /**
+     * Setup enviforment for tesing SCell class.
+     */
     @BeforeEach
     public void setUp() {
         blockedCell = new SCell(SCell.BLOCKED);
