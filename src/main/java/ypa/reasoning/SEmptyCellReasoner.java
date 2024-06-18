@@ -26,8 +26,7 @@ public abstract class SEmptyCellReasoner extends SReasoner {
     @Override
     public SCompoundCommand apply() {
         final SCompoundCommand result = super.apply();
-
-// Apply reasoner to all empty cells, execute and return command
+        // Apply reasoner to all empty cells, execute and return command
         for (SCell cell : puzzle.getCells()) {
             if (cell.isEmpty()) {
                 SCompoundCommand command = applyToCell(cell);
@@ -39,8 +38,7 @@ public abstract class SEmptyCellReasoner extends SReasoner {
                 }
             }
         }
-//
-
+        
         return result;
     }
 

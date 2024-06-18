@@ -40,8 +40,7 @@ public class SCompoundReasoner extends SReasoner {
 
     @Override
     public SCompoundCommand apply() {
-
-//  Apply sequence of reasoners until first change
+        //  Apply sequence of reasoners until first change
         for (SReasoner reasoner : reasoners) {
             final SCompoundCommand command = reasoner.apply();
             if (command == null) {
@@ -50,7 +49,6 @@ public class SCompoundReasoner extends SReasoner {
                 return command;
             }
         }
-//
 
         return super.apply();
     }

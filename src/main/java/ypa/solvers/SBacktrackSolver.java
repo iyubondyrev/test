@@ -40,7 +40,7 @@ public class SBacktrackSolver extends SAbstractSolver {
         this.reasoner = reasoner;
     }
 
-// Auxiliary methods
+    // Auxiliary methods
     /**
      * Returns first empty cell, or null if no empty cells.
      * TODO: Could look for "better" empty cell.
@@ -55,11 +55,10 @@ public class SBacktrackSolver extends SAbstractSolver {
         }
         return null;
     }
-//
 
     @Override
     public boolean solve() {
-// Backtracking solver, using the reasoner if not null
+        // Backtracking solver, using the reasoner if not null
         if (reasoner != null) {
             // first, fill in cells by reasoning
             final SCommand compound = reasoner.apply();
@@ -96,7 +95,6 @@ public class SBacktrackSolver extends SAbstractSolver {
             // to revert the reasoned cells
             commands.pop().revert();
         }
-//
 
         return false;
     }

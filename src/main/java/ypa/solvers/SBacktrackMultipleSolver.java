@@ -4,14 +4,17 @@ import ypa.command.SCommand;
 import ypa.command.SSetCommand;
 import ypa.model.SCell;
 import ypa.model.SPuzzle;
-import ypa.model.SGrid;
 import ypa.reasoning.SReasoner;
-
-import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
+/**
+ * Backtracking solver for a puzzle that can find multiple solutions.
+ * The solutions are stored in a list of {@link SolutionRecord} objects.
+ * 
+ * @author Aleksandr Vardanian 1942263
+ * @author Aleksandr Nikolaev 2001675
+ */
 public class SBacktrackMultipleSolver extends SBacktrackSolver {
     protected ArrayList<SolutionRecord> solutions;
 
@@ -27,7 +30,10 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
         this.solutions = new ArrayList<SolutionRecord>();
     }
 
-
+    /**
+     * Solves the puzzle and stores the solutions in a list of {@link SolutionRecord} objects.
+     * @return true if the puzzle is solvable, false otherwise
+     */
     @Override
     public boolean solve() {
         boolean reply = false;
@@ -47,12 +53,21 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
         return reply;
     }
 
+    /**
+     * Returns the list of solutions.
+     * @return the list of solutions
+     */
     public ArrayList<SolutionRecord> getSolutions() {
         return this.solutions;
     }
 
+    /**
+     * Adds every unique solution to the list of solutions and reverses the commands.
+     * @return true if there are solutions, false otherwise
+     */
+
     private boolean getManySolution() {
-        while(this.getOneUniqueSolution()) {
+        while (this.getOneUniqueSolution()) {
             ArrayList<SCommand> reversedCommand = this.reverseCommands();
             SolutionRecord solution = new SolutionRecord(this.getPuzzleState(), reversedCommand);
             this.solutions.add(solution);
@@ -66,7 +81,10 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
         return this.solutions.size() > 0;
     }
 
-
+    /**
+     * Reverses the commands in the stack.
+     * @return the reversed commands
+     */
     private ArrayList<SCommand> reverseCommands() {
         ArrayList<SCommand> reversedCommands = new ArrayList<SCommand>();
         
@@ -78,17 +96,16 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
         return reversedCommands;
     }
 
-
     /**
-     * 
-     * @param uniqueSolution
-     * @return
+     * Checks if the found solution is unique.
+     * @param solution the solution to check
+     * @return true if the solution is unique, false otherwise
      */
     private boolean isUniqueSolution(final int[] solution) {
         boolean uniqueSolution = true;
 
         for (SolutionRecord otherSolution: this.solutions) {
-            if (AreEqualArrays(solution, otherSolution.solution)) {
+            if (areEqualArrays(solution, otherSolution.solution)) {
                 uniqueSolution = false;
             }
         }
@@ -97,12 +114,12 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
     }
 
     /**
-     * 
-     * @param array1
-     * @param array2
-     * @return
+     * Checks if two arrays are equal.
+     * @param array1 the first array
+     * @param array2 the second array
+     * @return true if the arrays are equal, false otherwise
      */
-    private static boolean AreEqualArrays(final int[] array1, final int[] array2) {
+    private static boolean areEqualArrays(final int[] array1, final int[] array2) {
         boolean reply = true;
 
         if (array1.length == array2.length) {
@@ -111,16 +128,19 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
                     reply = false;
                 }
             }
-        }
-        else {
+        } else {
             reply = false;
         }
 
         return reply;
     }
 
+    /**
+     * Finds one unique solution for the puzzle.
+     * @return true if a solution is found, false otherwise
+     */
     private boolean getOneUniqueSolution() {
-// Backtracking solver, using the reasoner if not null
+        // Backtracking solver, using the reasoner if not null
         if (reasoner != null) {
             // first, fill in cells by reasoning
             final SCommand compound = reasoner.apply();
@@ -130,7 +150,6 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
             }
             commands.push(compound);
         }
-
         final SCell cell = getEmptyCell();
         if (cell == null) {
             // no more empty cells
@@ -157,14 +176,13 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
             // to revert the reasoned cells
             commands.pop().revert();
         }
-//
 
         return false;
     }
 
     /**
-     * 
-     * @return
+     * Returns the state of the puzzle.
+     * @return the state of the puzzle
      */
     public int[] getPuzzleState() {
 

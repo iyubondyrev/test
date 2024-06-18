@@ -22,7 +22,7 @@ public class SFixpointReasoner extends SReasonerDecorator {
     public SCompoundCommand apply() {
         final SCompoundCommand result = super.apply();
 
-// repeatedly apply reasoner until no change occurs
+        // repeatedly apply reasoner until no change occurs
         SCompoundCommand compound;
         do {
             compound = reasoner.apply();
@@ -32,7 +32,6 @@ public class SFixpointReasoner extends SReasonerDecorator {
             }
             result.addAll(compound);
         } while (compound.size() > 0);
-//
 
         return result;
     }
