@@ -1,6 +1,6 @@
 # <Sujiko>
 ## Group Assignment 2IRR00 2024 group 60
-* Ivan Bondyrev
+* Ivan Bondyrev 1970275
 * Dainius Gelžinis 1995006
 * Akvilė Lukauskaitė 1953648
 * Aleksandr Nikolaev 2001675
@@ -51,6 +51,10 @@ For Model package we used a Facade Pattern:
 SPuzzle acts as a Facade, providing a simplified interface for interacting with the puzzle. It offers high-level methods for managing the puzzle's state, checking its validity, and accessing cells, without exposing the complexity of the underlying classes (SGrid, SCell, SEntry).
 
 The structure of the Command package was not changed. It is implemented using command and composite patterns. We also used stack to implement undo-redo features.
+
+As for the GUI, we did not change the general structure a lot. We implemented solving with findind and displaying all solutions, working in the background using SwingWorker. The design employs MVC pattern, undo and redo. Puzzle can be saved to a file. It is possible to switch between solving, editing, and viewing modes. There is a mode to stop at first solution.
+
+For reasoning and solvers, we adapted the existing classes and methods for new models, implemented new backtracking solver that is able to find all solutions. The solver is interruptible by the user, highlights the rule violations, has recursive design. Reasoners can be applied to fill cells. 
 
 ### Important!
 d8fc95b67f8a215a8e808ebd0568bec113ca34ba commit contains a zip folder of the project as it was between 4 and 6 of June. My (Akvile) commits in that time frame were deleted by a force push. This solution is with the agreement of Jacob Krüger. Sorry for the additional work.

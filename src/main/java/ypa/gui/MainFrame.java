@@ -32,6 +32,8 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.ArrayList;
 
 import ypa.model.SLocation;
@@ -43,6 +45,8 @@ import ypa.model.SLocation;
  * @author Tom Verhoeff (Eindhoven University of Technology)
  */
 public class MainFrame extends javax.swing.JFrame {
+
+    protected SwingWorker<Void,Void> solverThread = null;
 
     /**
      * Creates new form MainFrame.
@@ -311,7 +315,12 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuPuzzle.add(jMenuItemSolve);
 
         jMenuItem1.setText("Abort");
-        jMenuItem1.setEnabled(false);
+        jMenuItem1.setEnabled(true);
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenuPuzzle.add(jMenuItem1);
 
         jCheckBoxMenuItem1.setSelected(true);
@@ -781,9 +790,11 @@ public class MainFrame extends javax.swing.JFrame {
             jTextArea.append(message + "\n");
             updateFrame();
         } else {
-            new SolverWorker(jCheckBoxMenuItem1.isSelected()).execute();
+            solverThread = new SolverWorker(jCheckBoxMenuItem1.isSelected());
+            solverThread.execute();
         }
     }//GEN-LAST:event_jMenuItemSolveActionPerformed
+
 
     private void jCheckBoxMenuItemStopAtFirstChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemStopAtFirstChangeActionPerformed
         // TODO add your handling code here:
@@ -907,23 +918,26 @@ public class MainFrame extends javax.swing.JFrame {
                 message = "Puzzle not solvable";
             }
         }
+        
+        jTextArea.append(message + "\n");
+        updateFrame();
         return null;
     }
-
-    @Override
-    protected void done() {
-        try {
-            get();
-            if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
-                message = "To solve the puzzle you need to exit Edit mode";
-            }
-            jTextArea.append(message + "\n");
-            updateFrame();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        if (solverThread != null && !solverThread.isDone() && !solverThread.isCancelled()) {
+            try {
+                solverThread.cancel(true);
+            } catch (CancellationException e) {
+                jTextArea.append("Solver did not complete job.\n");
+            }
+
+            // solverThread = null;
+            jTextArea.append("Solving aborted.\n");
+            updateFrame();
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
