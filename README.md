@@ -37,7 +37,7 @@ Apply Reasoning and Manage Actions:
 
 Automatically Solve the Puzzle:
 
-- Press the "solve" button to display the solution(s) of the puzzle.
+- Press the "solve" button to display the solutions of the puzzle. If "Stop at first solution" is on, the program will dispaly only one solution, if there is such.
 
 In the "View"mode the user cannot change any values.
 
@@ -49,6 +49,8 @@ TODO: A short list and explanation of what design patterns you used/modified to 
 For Model package we used a Facade Pattern:
 
 SPuzzle acts as a Facade, providing a simplified interface for interacting with the puzzle. It offers high-level methods for managing the puzzle's state, checking its validity, and accessing cells, without exposing the complexity of the underlying classes (SGrid, SCell, SEntry).
+
+The structure of the Command package was not changed. It is implemented using command and composite patterns. We also used stack to implement undo-redo features.
 
 ### Important!
 d8fc95b67f8a215a8e808ebd0568bec113ca34ba commit contains a zip folder of the project as it was between 4 and 6 of June. My (Akvile) commits in that time frame were deleted by a force push. This solution is with the agreement of Jacob Krüger. Sorry for the additional work.
