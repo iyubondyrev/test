@@ -36,9 +36,9 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
      */
     @Override
     public boolean solve() {
-        boolean reply = false;
+        boolean hasSolution = this.getManySolution();
 
-        if (this.getManySolution()) {
+        if (hasSolution) {
             ArrayList<SCommand> executedCommands = this.solutions.get(0).commands;
 
             for (int ind = 0; ind != executedCommands.size(); ++ind) {
@@ -46,11 +46,9 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
                 command.execute();
                 this.commands.push(command);
             }
-
-            reply = true;
         }
 
-        return reply;
+        return hasSolution;
     }
 
     /**

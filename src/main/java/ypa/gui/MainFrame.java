@@ -762,7 +762,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         // puzzle != null
 
-        boolean stopAtFirstSolution = jCheckBoxMenuItem1.isSelected();
+
         String message = "";
 
         boolean hasEmptyCell = false;
@@ -772,92 +772,17 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
 
-        if (!hasEmptyCell) {
-            message += "Puzzle is full.";
-        }
-        else {
-            if (stopAtFirstSolution) {
-                SReasoner reasoner = null;
-                SAbstractSolver solver = null;
-                // Configure and invoke solver
-                reasoner = new SEntryWithOneEmptyCell(puzzle);
-                //reasoner = new BasicEmptyCellByContradiction(puzzle);
-                reasoner = new SFixpointReasoner(puzzle, reasoner);
-                solver = new SBacktrackSolver(puzzle, reasoner);
-                //
-                if (solver == null) {
-                    message = "Solve is not yet implemented.";
-                } else if (solver.solve()) {
-                    message = "Puzzle solved";
-                    // handle result of solver
-                    final Collection<SCommand> commands = solver.getCommands();
-                    message = message + ": " + commands.size() + " steps";
-                    for (final SCommand command : commands) {
-                        if (command instanceof SCompoundCommand &&
-                                ((SCompoundCommand) command).size() == 0) {
-                            continue;
-                        }
-                        undoRedo.did(command);
-                    }
-                } else {
-                    message = "Puzzle not solvable";
-                }
-            }
-            else {
-                SReasoner reasoner = null;
-                SBacktrackMultipleSolver solver = null;
-                solver = new SBacktrackMultipleSolver(puzzle, reasoner);
-
-                if (solver == null) {
-                    message = "Solve is not yet implemented.";
-                } else if (solver.solve()) {
-                    message = "Puzzle solved";
-
-                    final Collection<SCommand> commands = solver.getCommands();
-                    message = message + ": " + commands.size() + " steps";
-                    for (final SCommand command : commands) {
-                        if (command instanceof SCompoundCommand &&
-                                ((SCompoundCommand) command).size() == 0) {
-                            continue;
-                        }
-                        undoRedo.did(command);
-                    }
-                    
-                    ArrayList<SolutionRecord> solutions = solver.getSolutions();
-                    message += "\nPuzzle has " + solutions.size() + " solution(s).\n";
-                    message += "Solution №1 on the grid.\n";
-                    
-                    if (solutions.size() > 1) {
-                        message += "Other solution of sujiko:\n";
-                        for (int ind = 1; ind != solutions.size(); ++ ind) {
-                            SolutionRecord solution = solutions.get(ind);
-                            String solutionText = "Solution №" + (ind + 1) + "\n";
-
-                            for (int el_ind = 0; el_ind != solution.solution.length; ++ el_ind) {
-                                solutionText += solution.solution[el_ind] + " ";
-
-                                if (el_ind % 3 == 2) {
-                                 solutionText += "\n";
-                                }
-                            }
-
-                            solutionText += "\n";
-                            message += solutionText;
-                        }
-                    }
-
-                } else {
-                    message = "Puzzle not solvable";
-                }
-            }
-        }
-
         if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
             message = "To solve the puzzle you need to exit Edit mode";
+            jTextArea.append(message + "\n");
+            updateFrame();
+        } else if (!hasEmptyCell) {
+            message = "Puzzle is full.";
+            jTextArea.append(message + "\n");
+            updateFrame();
+        } else {
+            new SolverWorker(jCheckBoxMenuItem1.isSelected()).execute();
         }
-
-        jTextArea.append(message + "\n");
-        updateFrame();
     }//GEN-LAST:event_jMenuItemSolveActionPerformed
 
     private void jCheckBoxMenuItemStopAtFirstChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemStopAtFirstChangeActionPerformed
@@ -898,6 +823,107 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
+
+    private class SolverWorker extends SwingWorker<Void, Void> {
+    private final boolean stopAtFirstSolution;
+    private String message = "";
+
+    public SolverWorker(boolean stopAtFirstSolution) {
+        this.stopAtFirstSolution = stopAtFirstSolution;
+    }
+
+    @Override
+    protected Void doInBackground() throws Exception {
+        if (stopAtFirstSolution) {
+            SReasoner reasoner = null;
+            SAbstractSolver solver = null;
+            // Configure and invoke solver
+            reasoner = new SEntryWithOneEmptyCell(puzzle);
+            //reasoner = new BasicEmptyCellByContradiction(puzzle);
+            reasoner = new SFixpointReasoner(puzzle, reasoner);
+            solver = new SBacktrackSolver(puzzle, reasoner);
+            //
+            if (solver == null) {
+                message = "Solve is not yet implemented.";
+            } else if (solver.solve()) {
+                message = "Puzzle solved";
+                // handle result of solver
+                final Collection<SCommand> commands = solver.getCommands();
+                message = message + ": " + commands.size() + " steps";
+                for (final SCommand command : commands) {
+                    if (command instanceof SCompoundCommand &&
+                            ((SCompoundCommand) command).size() == 0) {
+                        continue;
+                    }
+                    undoRedo.did(command);
+                }
+            } else {
+                message = "Puzzle not solvable";
+            }
+        } else {
+            SReasoner reasoner = null;
+            SBacktrackMultipleSolver solver = null;
+            solver = new SBacktrackMultipleSolver(puzzle, reasoner);
+
+            if (solver == null) {
+                message = "Solve is not yet implemented.";
+            } else if (solver.solve()) {
+                message = "Puzzle solved";
+
+                final Collection<SCommand> commands = solver.getCommands();
+                message = message + ": " + commands.size() + " steps";
+                for (final SCommand command : commands) {
+                    if (command instanceof SCompoundCommand &&
+                            ((SCompoundCommand) command).size() == 0) {
+                        continue;
+                    }
+                    undoRedo.did(command);
+                }
+
+                ArrayList<SolutionRecord> solutions = solver.getSolutions();
+                message += "\nPuzzle has " + solutions.size() + " solution(s).\n";
+                message += "Solution №1 on the grid.\n";
+
+                if (solutions.size() > 1) {
+                    message += "Other solutions of sujiko:\n";
+                    for (int ind = 1; ind != solutions.size(); ++ind) {
+                        SolutionRecord solution = solutions.get(ind);
+                        String solutionText = "Solution №" + (ind + 1) + "\n";
+
+                        for (int el_ind = 0; el_ind != solution.solution.length; ++el_ind) {
+                            solutionText += solution.solution[el_ind] + " ";
+
+                            if (el_ind % 3 == 2) {
+                                solutionText += "\n";
+                            }
+                        }
+
+                        solutionText += "\n";
+                        message += solutionText;
+                    }
+                }
+
+            } else {
+                message = "Puzzle not solvable";
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void done() {
+        try {
+            get();
+            if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
+                message = "To solve the puzzle you need to exit Edit mode";
+            }
+            jTextArea.append(message + "\n");
+            updateFrame();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
