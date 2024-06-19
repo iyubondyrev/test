@@ -7,11 +7,17 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for SGrid class.
+ */
 public class SGridTest {
 
     private SGrid grid;
     private Scanner validScanner;
 
+    /**
+     * SetUp environment for tests.
+     */
     @BeforeEach
     public void setUp() {
         String validInput = "2 2 15\n2 4 20\n4 2 25\n4 4 30\n";

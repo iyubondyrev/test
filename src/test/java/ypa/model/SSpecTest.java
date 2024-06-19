@@ -9,6 +9,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for SSpec class.
+ */
 public class SSpecTest {
 
     private Set<Integer> validCombination;
@@ -16,7 +19,10 @@ public class SSpecTest {
     private Set<Integer> negativeCombination;
     private Scanner validScanner;
     private Scanner invalidScanner;
-    
+
+    /**
+     * SetUp environment for tests.
+     */
     @BeforeEach
     public void setUp() {
         validCombination = new HashSet<>();

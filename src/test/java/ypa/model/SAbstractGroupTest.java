@@ -14,12 +14,18 @@ class TestGroup extends SAbstractGroup {
     }
 }
 
+/**
+ * Test for SAbstractGroup class.
+ */
 public class SAbstractGroupTest {
     private TestGroup group;
     private SCell blockedCell;
     private SCell emptyCell;
     private SCell filledCell;
 
+    /**
+     * Setup environment for tests.
+     */
     @BeforeEach
     public void setUp() {
         group = new TestGroup();
