@@ -159,6 +159,7 @@ public class SBacktrackMultipleSolver extends SBacktrackSolver {
             for (int state = puzzle.getMinNumber(); state <= puzzle.getMaxNumber(); ++state) {
                 final SCommand command = new SSetCommand(cell, state);
                 command.execute();
+
                 if (puzzle.isValid()) {
                     commands.push(command);
                     // number of open cells is one less

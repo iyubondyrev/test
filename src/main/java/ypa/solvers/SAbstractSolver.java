@@ -55,5 +55,4 @@ public abstract class SAbstractSolver {
      *      (\result && puzzle.isSolved()) || (! \result && puzzle unchanged)}
      */
     public abstract boolean solve();
-
 }

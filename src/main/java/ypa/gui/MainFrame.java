@@ -15,6 +15,9 @@ import ypa.reasoning.SFixpointReasoner;
 import ypa.reasoning.SReasoner;
 import ypa.solvers.SAbstractSolver;
 import ypa.solvers.SBacktrackSolver;
+import ypa.solvers.SBacktrackMultipleSolver;
+import ypa.solvers.SolutionRecord;
+
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,9 +28,11 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import ypa.model.SLocation;
 
@@ -757,35 +762,100 @@ public class MainFrame extends javax.swing.JFrame {
         }
         // puzzle != null
 
-        String message;
-        SReasoner reasoner = null;
-        SAbstractSolver solver = null;
-// Configure and invoke solver
-        reasoner = new SEntryWithOneEmptyCell(puzzle);
-        //reasoner = new BasicEmptyCellByContradiction(puzzle);
-        reasoner = new SFixpointReasoner(puzzle, reasoner);
-        solver = new SBacktrackSolver(puzzle, reasoner);
-//
-        if (solver == null) {
-            message = "Solve is not yet implemented.";
-        } else if (solver.solve()) {
-            message = "Puzzle solved";
-            // handle result of solver
-            final Collection<SCommand> commands = solver.getCommands();
-            message = message + ": " + commands.size() + " steps";
-            for (final SCommand command : commands) {
-                if (command instanceof SCompoundCommand &&
-                        ((SCompoundCommand) command).size() == 0) {
-                    continue;
-                }
-                undoRedo.did(command);
+        boolean stopAtFirstSolution = jCheckBoxMenuItem1.isSelected();
+        String message = "";
+
+        boolean hasEmptyCell = false;
+        for (final SCell cell : puzzle.getCells()) {
+            if (cell.isEmpty()) {
+                hasEmptyCell = true;
             }
-        } else {
-            message = "Puzzle not solvable";
         }
+
+        if (!hasEmptyCell) {
+            message += "Puzzle is full.";
+        }
+        else {
+            if (stopAtFirstSolution) {
+                SReasoner reasoner = null;
+                SAbstractSolver solver = null;
+                // Configure and invoke solver
+                reasoner = new SEntryWithOneEmptyCell(puzzle);
+                //reasoner = new BasicEmptyCellByContradiction(puzzle);
+                reasoner = new SFixpointReasoner(puzzle, reasoner);
+                solver = new SBacktrackSolver(puzzle, reasoner);
+                //
+                if (solver == null) {
+                    message = "Solve is not yet implemented.";
+                } else if (solver.solve()) {
+                    message = "Puzzle solved";
+                    // handle result of solver
+                    final Collection<SCommand> commands = solver.getCommands();
+                    message = message + ": " + commands.size() + " steps";
+                    for (final SCommand command : commands) {
+                        if (command instanceof SCompoundCommand &&
+                                ((SCompoundCommand) command).size() == 0) {
+                            continue;
+                        }
+                        undoRedo.did(command);
+                    }
+                } else {
+                    message = "Puzzle not solvable";
+                }
+            }
+            else {
+                SReasoner reasoner = null;
+                SBacktrackMultipleSolver solver = null;
+                solver = new SBacktrackMultipleSolver(puzzle, reasoner);
+
+                if (solver == null) {
+                    message = "Solve is not yet implemented.";
+                } else if (solver.solve()) {
+                    message = "Puzzle solved";
+
+                    final Collection<SCommand> commands = solver.getCommands();
+                    message = message + ": " + commands.size() + " steps";
+                    for (final SCommand command : commands) {
+                        if (command instanceof SCompoundCommand &&
+                                ((SCompoundCommand) command).size() == 0) {
+                            continue;
+                        }
+                        undoRedo.did(command);
+                    }
+                    
+                    ArrayList<SolutionRecord> solutions = solver.getSolutions();
+                    message += "\nPuzzle has " + solutions.size() + " solution(s).\n";
+                    message += "Solution №1 on the grid.\n";
+                    
+                    if (solutions.size() > 1) {
+                        message += "Other solution of sujiko:\n";
+                        for (int ind = 1; ind != solutions.size(); ++ ind) {
+                            SolutionRecord solution = solutions.get(ind);
+                            String solutionText = "Solution №" + (ind + 1) + "\n";
+
+                            for (int el_ind = 0; el_ind != solution.solution.length; ++ el_ind) {
+                                solutionText += solution.solution[el_ind] + " ";
+
+                                if (el_ind % 3 == 2) {
+                                 solutionText += "\n";
+                                }
+                            }
+
+                            solutionText += "\n";
+                            message += solutionText;
+                        }
+                    }
+
+                } else {
+                    message = "Puzzle not solvable";
+                }
+            }
+        }
+
         if (puzzle.getMode() == SPuzzle.Mode.EDIT) {
             message = "To solve the puzzle you need to exit Edit mode";
         }
+
         jTextArea.append(message + "\n");
         updateFrame();
     }//GEN-LAST:event_jMenuItemSolveActionPerformed
